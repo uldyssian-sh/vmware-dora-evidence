@@ -2,7 +2,6 @@
 
 **Author:** LT  
 **Version:** 1.0  
-**Target:** VMware vSphere 8 (ESXi & vCenter)
 
 ---
 
