@@ -68,35 +68,7 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Getting Started:
-    - Installation: installation.md
-    - Configuration: configuration.md
-    - Quick Start: tutorials/quick-start.md
-  - User Guide:
-    - DORA Metrics: guides/dora-metrics.md
-    - Data Collection: guides/data-collection.md
-    - Reporting: guides/reporting.md
-    - Monitoring: guides/monitoring.md
-  - Tutorials:
-    - Basic Usage: tutorials/basic-usage.md
-    - Advanced Configuration: tutorials/advanced-configuration.md
-    - Custom Integrations: tutorials/custom-integrations.md
-    - Troubleshooting: tutorials/troubleshooting.md
-  - API Reference:
-    - Overview: api/overview.md
-    - Collectors: api/collectors.md
-    - Analyzers: api/analyzers.md
-    - Reporters: api/reporters.md
-    - Integrations: api/integrations.md
-  - Development:
-    - Contributing: ../CONTRIBUTING.md
-    - Architecture: development/architecture.md
-    - Testing: development/testing.md
-    - Release Process: development/release-process.md
-  - About:
-    - License: ../LICENSE
-    - Changelog: ../CHANGELOG.md
-    - FAQ: faq.md
+  - Installation: installation.md
 
 extra:
   social:
