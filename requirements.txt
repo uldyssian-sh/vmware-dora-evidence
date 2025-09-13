@@ -1,0 +1,44 @@
+# Core dependencies
+requests>=2.28.0
+pyyaml>=6.0
+click>=8.1.0
+python-dateutil>=2.8.0
+jinja2>=3.1.0
+
+# VMware integration
+pyvmomi>=8.0.0
+vapi-client-bindings>=4.0.0
+vapi-runtime>=2.40.0
+
+# Data processing
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Visualization
+matplotlib>=3.6.0
+plotly>=5.11.0
+
+# Database
+sqlalchemy>=1.4.0
+alembic>=1.8.0
+
+# Configuration
+python-dotenv>=0.19.0
+configparser>=5.3.0
+
+# Logging
+structlog>=22.1.0
+
+# HTTP client
+httpx>=0.23.0
+
+# JSON handling
+orjson>=3.8.0
+
+# Async support
+asyncio>=3.4.3
+aiohttp>=3.8.0
+
+# Utilities
+rich>=12.6.0
+typer>=0.7.0

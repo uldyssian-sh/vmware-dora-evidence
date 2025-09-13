@@ -1,0 +1,156 @@
+# VMware DORA Evidence Configuration Template
+# Copy this file to config.yaml and update with your environment details
+
+# VMware vCenter Configuration
+vmware:
+  vcenter_host: "your-vcenter-host.example.com"
+  username: "your-username"
+  password: "your-password"  # Use environment variables in production
+  port: 443
+  ignore_ssl_errors: false  # Set to true for self-signed certificates
+  timeout_seconds: 30
+
+# Database Configuration
+database:
+  type: "sqlite"  # Options: sqlite, postgresql, mysql
+  url: "sqlite:///dora_evidence.db"
+  # For PostgreSQL: "postgresql://user:password@localhost:5432/dora_evidence"
+  # For MySQL: "mysql://user:password@localhost:3306/dora_evidence"
+
+# Data Collection Configuration
+collection:
+  interval_minutes: 60  # How often to collect data
+  retention_days: 90    # How long to keep historical data
+  max_events_per_collection: 1000  # Maximum events per collection cycle
+  
+  # Event types to collect
+  event_types:
+    vm_events:
+      - "VmCreatedEvent"
+      - "VmDeployedEvent"
+      - "VmFailedToPowerOnEvent"
+      - "VmSuspendedEvent"
+      - "VmMigrateFailedEvent"
+    
+    host_events:
+      - "HostDisconnectedEvent"
+      - "HostConnectionLostEvent"
+      - "HostNotRespondingEvent"
+    
+    network_events:
+      - "DvsPortLinkDownEvent"
+      - "DvsPortLinkUpEvent"
+      - "NetworkRollbackEvent"
+
+# Logging Configuration
+logging:
+  level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/dora-evidence.log"  # Optional: log to file
+
+# Reporting Configuration
+reporting:
+  output_directory: "reports"
+  include_charts: true
+  chart_format: "png"  # Options: png, svg, pdf
+  
+  # Report templates
+  templates:
+    executive_summary: "templates/executive_summary.html"
+    detailed_report: "templates/detailed_report.html"
+    dashboard: "templates/dashboard.html"
+
+# DORA Metrics Configuration
+metrics:
+  # Deployment Frequency
+  deployment_frequency:
+    measurement_period_days: 30
+    include_types:
+      - "vm_deployment"
+      - "application_deployment"
+      - "infrastructure_change"
+  
+  # Lead Time for Changes
+  lead_time:
+    measurement_period_days: 30
+    # Integration with version control systems
+    vcs_integration:
+      enabled: false
+      type: "git"  # Options: git, svn
+      repository_url: ""
+  
+  # Change Failure Rate
+  change_failure_rate:
+    measurement_period_days: 30
+    failure_indicators:
+      - "rollback_events"
+      - "hotfix_deployments"
+      - "incident_correlation"
+  
+  # Time to Restore Service
+  recovery_time:
+    measurement_period_days: 30
+    incident_sources:
+      - "vmware_events"
+      - "monitoring_alerts"
+      - "manual_incidents"
+
+# Integration Configuration
+integrations:
+  # CI/CD Systems
+  cicd:
+    enabled: false
+    type: "jenkins"  # Options: jenkins, gitlab, github_actions, azure_devops
+    url: ""
+    api_token: ""
+  
+  # Monitoring Systems
+  monitoring:
+    enabled: false
+    type: "prometheus"  # Options: prometheus, grafana, datadog, newrelic
+    url: ""
+    api_key: ""
+  
+  # Incident Management
+  incident_management:
+    enabled: false
+    type: "servicenow"  # Options: servicenow, jira, pagerduty
+    url: ""
+    api_key: ""
+
+# Security Configuration
+security:
+  # Encryption settings
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+  
+  # API security
+  api:
+    rate_limiting: true
+    max_requests_per_minute: 100
+    require_authentication: true
+  
+  # Data privacy
+  privacy:
+    anonymize_user_data: true
+    data_retention_days: 365
+    gdpr_compliance: true
+
+# Performance Configuration
+performance:
+  # Caching
+  cache:
+    enabled: true
+    ttl_seconds: 3600
+    max_size_mb: 100
+  
+  # Parallel processing
+  parallel_processing:
+    enabled: true
+    max_workers: 4
+  
+  # Database optimization
+  database:
+    connection_pool_size: 10
+    query_timeout_seconds: 30

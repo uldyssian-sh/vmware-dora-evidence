@@ -1,0 +1,207 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vmware-dora-evidence"
+version = "1.0.0"
+description = "A comprehensive tool for collecting and analyzing DORA metrics from VMware environments"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "VMware DORA Evidence Team", email = "support@example.com"}
+]
+maintainers = [
+    {name = "VMware DORA Evidence Team", email = "support@example.com"}
+]
+keywords = ["vmware", "dora", "devops", "metrics", "monitoring"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: System :: Monitoring",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Software Development :: Quality Assurance"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.28.0",
+    "pyyaml>=6.0",
+    "click>=8.1.0",
+    "python-dateutil>=2.8.0",
+    "jinja2>=3.1.0",
+    "pyvmomi>=8.0.0",
+    "vapi-client-bindings>=4.0.0",
+    "vapi-runtime>=2.40.0",
+    "pandas>=1.5.0",
+    "numpy>=1.21.0",
+    "matplotlib>=3.6.0",
+    "plotly>=5.11.0",
+    "sqlalchemy>=1.4.0",
+    "alembic>=1.8.0",
+    "python-dotenv>=0.19.0",
+    "configparser>=5.3.0",
+    "structlog>=22.1.0",
+    "httpx>=0.23.0",
+    "orjson>=3.8.0",
+    "aiohttp>=3.8.0",
+    "rich>=12.6.0",
+    "typer>=0.7.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.2.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-asyncio>=0.20.0",
+    "moto>=4.2.0",
+    "factory-boy>=3.2.0",
+    "black>=22.10.0",
+    "flake8>=6.0.0",
+    "mypy>=0.991",
+    "isort>=5.11.0",
+    "bandit>=1.7.4",
+    "pylint>=2.15.0",
+    "autopep8>=2.0.0",
+    "pre-commit>=2.20.0",
+    "safety>=2.3.0",
+    "py-spy>=0.3.14"
+]
+docs = [
+    "mkdocs>=1.4.2",
+    "mkdocs-material>=8.5.10",
+    "mkdocs-mermaid2-plugin>=0.6.0",
+    "mkdocstrings>=0.19.0",
+    "sphinx>=5.3.0",
+    "sphinx-rtd-theme>=1.1.1"
+]
+test = [
+    "pytest>=7.2.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-asyncio>=0.20.0",
+    "responses>=0.22.0",
+    "freezegun>=1.2.2"
+]
+
+[project.urls]
+Homepage = "https://github.com/uldyssian-sh/vmware-dora-evidence"
+Documentation = "https://github.com/uldyssian-sh/vmware-dora-evidence/wiki"
+Repository = "https://github.com/uldyssian-sh/vmware-dora-evidence.git"
+"Bug Tracker" = "https://github.com/uldyssian-sh/vmware-dora-evidence/issues"
+Changelog = "https://github.com/uldyssian-sh/vmware-dora-evidence/blob/main/CHANGELOG.md"
+
+[project.scripts]
+dora-evidence = "src.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pyVim.*",
+    "pyVmomi.*",
+    "vapi_client_bindings.*",
+    "vapi_runtime.*"
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests"
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "setup.py"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:"
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "test_*"]
+skips = ["B101", "B601"]
+
+[tool.pylint.messages_control]
+disable = [
+    "C0330",  # Wrong hanging indentation
+    "C0326",  # Bad whitespace
+    "R0903",  # Too few public methods
+    "R0913",  # Too many arguments
+    "W0613",  # Unused argument
+]
+
+[tool.pylint.format]
+max-line-length = 88
