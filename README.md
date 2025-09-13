@@ -8,6 +8,8 @@
 
 A comprehensive tool for collecting and analyzing DORA (DevOps Research and Assessment) metrics from VMware environments, providing insights into deployment frequency, lead time, change failure rate, and recovery time.
 
+**Author**: LT - [GitHub Profile](https://github.com/uldyssian-sh)
+
 ## 🚀 Features
 
 - **Automated DORA Metrics Collection**: Seamlessly gather deployment frequency, lead time for changes, change failure rate, and time to restore service
