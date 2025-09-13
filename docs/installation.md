@@ -443,16 +443,10 @@ python -m src.cli health-check
 
 If you encounter issues not covered in this guide:
 
-1. Check the [FAQ](faq.md)
-2. Search [existing issues](https://github.com/uldyssian-sh/vmware-dora-evidence/issues)
-3. Create a [new issue](https://github.com/uldyssian-sh/vmware-dora-evidence/issues/new)
-4. Join our [discussions](https://github.com/uldyssian-sh/vmware-dora-evidence/discussions)
+1. Search [existing issues](https://github.com/uldyssian-sh/vmware-dora-evidence/issues)
+2. Create a [new issue](https://github.com/uldyssian-sh/vmware-dora-evidence/issues/new)
+3. Join our [discussions](https://github.com/uldyssian-sh/vmware-dora-evidence/discussions)
 
 ## Next Steps
 
-After successful installation:
-
-1. Read the [Configuration Guide](configuration.md)
-2. Follow the [Quick Start Tutorial](tutorials/quick-start.md)
-3. Explore the [API Documentation](api.md)
-4. Set up [monitoring and alerting](monitoring.md)
+After successful installation, you can start using the VMware DORA Evidence tool to collect and analyze metrics from your VMware environment.
