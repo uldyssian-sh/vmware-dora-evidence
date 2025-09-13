@@ -58,14 +58,7 @@ jobs:
         flags: unittests
         name: codecov-umbrella
 
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: test-results-${{ matrix.python-version }}
-        path: |
-          junit.xml
-          htmlcov/
+
 
   security:
     name: Security Scan
@@ -94,14 +87,7 @@ jobs:
       run: |
         safety check || echo "Safety check completed with warnings"
 
-    - name: Upload security reports
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: security-reports
-        path: |
-          bandit-report.json
-          safety-report.json
+
 
   code-quality:
     name: Code Quality
