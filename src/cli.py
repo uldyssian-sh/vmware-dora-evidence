@@ -372,23 +372,40 @@ def version(ctx):
 
 def _safe_path(user_path: str) -> Path:
     """Safely resolve user-provided path to prevent path traversal."""
-    # Convert to Path object
-    path = Path(user_path)
+    if not user_path or not isinstance(user_path, str):
+        raise ValueError("Invalid path provided")
     
-    # Resolve to absolute path
-    resolved_path = path.resolve()
+    # Remove null bytes and normalize
+    clean_path = user_path.replace('\x00', '')
+    
+    # Convert to Path object
+    path = Path(clean_path)
     
     # Get current working directory
     cwd = Path.cwd().resolve()
     
-    # Check if the resolved path is within current directory or its subdirectories
+    # If path is absolute, make it relative to cwd
+    if path.is_absolute():
+        # Extract just the filename for security
+        safe_name = os.path.basename(clean_path)
+        # Sanitize filename
+        safe_name = ''.join(c for c in safe_name if c.isalnum() or c in '.-_')
+        if not safe_name:
+            safe_name = 'output'
+        path = Path(safe_name)
+    
+    # Resolve to absolute path within cwd
+    resolved_path = (cwd / path).resolve()
+    
+    # Security check: ensure resolved path is within current directory
     try:
         resolved_path.relative_to(cwd)
     except ValueError:
-        # Path is outside current directory, restrict to current directory
+        # Path escapes current directory, use safe fallback
         safe_name = os.path.basename(user_path)
-        # Remove any remaining path separators
-        safe_name = safe_name.replace('/', '_').replace('\\', '_')
+        safe_name = ''.join(c for c in safe_name if c.isalnum() or c in '.-_')
+        if not safe_name:
+            safe_name = 'output'
         resolved_path = cwd / safe_name
     
     return resolved_path
