@@ -4,6 +4,7 @@ Command-line interface for VMware DORA Evidence.
 
 import click
 import sys
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
@@ -59,8 +60,8 @@ def collect(ctx, days: int, output: Optional[str], output_format: str):
         
         # Output results
         if output:
-            # Save to file
-            output_path = Path(output)
+            # Validate and sanitize output path
+            output_path = _safe_path(output)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
             if output_format == 'json':
@@ -118,7 +119,7 @@ def report(ctx, days: int, output: Optional[str], output_format: str, template: 
         
         # Save report
         if output:
-            output_dir = Path(output)
+            output_dir = _safe_path(output)
             output_dir.mkdir(parents=True, exist_ok=True)
             
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -348,7 +349,7 @@ reporting:
 """
     
     if output:
-        output_path = Path(output)
+        output_path = _safe_path(output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
         with open(output_path, 'w') as f:
@@ -367,6 +368,30 @@ def version(ctx):
     
     click.echo(f"VMware DORA Evidence v{__version__}")
     click.echo("A comprehensive tool for collecting and analyzing DORA metrics from VMware environments")
+
+
+def _safe_path(user_path: str) -> Path:
+    """Safely resolve user-provided path to prevent path traversal."""
+    # Convert to Path object
+    path = Path(user_path)
+    
+    # Resolve to absolute path
+    resolved_path = path.resolve()
+    
+    # Get current working directory
+    cwd = Path.cwd().resolve()
+    
+    # Check if the resolved path is within current directory or its subdirectories
+    try:
+        resolved_path.relative_to(cwd)
+    except ValueError:
+        # Path is outside current directory, restrict to current directory
+        safe_name = os.path.basename(user_path)
+        # Remove any remaining path separators
+        safe_name = safe_name.replace('/', '_').replace('\\', '_')
+        resolved_path = cwd / safe_name
+    
+    return resolved_path
 
 
 def main():
