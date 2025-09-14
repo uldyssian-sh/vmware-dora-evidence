@@ -36,7 +36,7 @@ class ConfigManager:
             'config/config.yaml',
             'config.yaml',
             os.path.expanduser('~/.vmware-dora-evidence/config.yaml'),
-            '/etc/vmware-dora-evidence/config.yaml'
+            os.path.join('etc', 'vmware-dora-evidence', 'config.yaml')
         ]
         
         for path in possible_paths:
@@ -103,7 +103,10 @@ class ConfigManager:
         if os.getenv('VMWARE_PASSWORD'):
             vmware_config['password'] = os.getenv('VMWARE_PASSWORD')
         if os.getenv('VMWARE_PORT'):
-            vmware_config['port'] = int(os.getenv('VMWARE_PORT'))
+            try:
+                vmware_config['port'] = int(os.getenv('VMWARE_PORT'))
+            except ValueError:
+                self.logger.warning(f"Invalid VMWARE_PORT value: {os.getenv('VMWARE_PORT')}")
         if os.getenv('VMWARE_IGNORE_SSL'):
             vmware_config['ignore_ssl_errors'] = os.getenv('VMWARE_IGNORE_SSL').lower() == 'true'
         
@@ -127,9 +130,15 @@ class ConfigManager:
         # Collection configuration
         collection_config = {}
         if os.getenv('COLLECTION_INTERVAL'):
-            collection_config['interval_minutes'] = int(os.getenv('COLLECTION_INTERVAL'))
+            try:
+                collection_config['interval_minutes'] = int(os.getenv('COLLECTION_INTERVAL'))
+            except ValueError:
+                self.logger.warning(f"Invalid COLLECTION_INTERVAL value: {os.getenv('COLLECTION_INTERVAL')}")
         if os.getenv('COLLECTION_RETENTION_DAYS'):
-            collection_config['retention_days'] = int(os.getenv('COLLECTION_RETENTION_DAYS'))
+            try:
+                collection_config['retention_days'] = int(os.getenv('COLLECTION_RETENTION_DAYS'))
+            except ValueError:
+                self.logger.warning(f"Invalid COLLECTION_RETENTION_DAYS value: {os.getenv('COLLECTION_RETENTION_DAYS')}")
         
         if collection_config:
             env_config['collection'] = collection_config
@@ -188,7 +197,7 @@ class ConfigManager:
         
         for field in required_vmware_fields:
             if not vmware_config.get(field):
-                self.logger.warning(f"Missing VMware configuration: {field}")
+                raise ValueError(f"Missing required VMware configuration: {field}")
         
         # Validate port
         port = vmware_config.get('port', 443)

@@ -61,21 +61,25 @@ def collect(ctx, days: int, output: Optional[str], output_format: str):
         # Output results
         if output:
             # Validate and sanitize output path
-            output_path = _safe_path(output)
-            output_path.parent.mkdir(parents=True, exist_ok=True)
-            
-            if output_format == 'json':
-                import json
-                with open(output_path, 'w') as f:
-                    json.dump(metrics.__dict__, f, indent=2, default=str)
-            elif output_format == 'yaml':
-                import yaml
-                with open(output_path, 'w') as f:
-                    yaml.dump(metrics.__dict__, f, default_flow_style=False)
-            elif output_format == 'csv':
-                import pandas as pd
-                df = pd.DataFrame([metrics.__dict__])
-                df.to_csv(output_path, index=False)
+            try:
+                output_path = _safe_path(output)
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                if output_format == 'json':
+                    import json
+                    with open(output_path, 'w', encoding='utf-8') as f:
+                        json.dump(metrics.__dict__, f, indent=2, default=str)
+            except (ValueError, OSError) as e:
+                click.echo(f"Error with output path: {str(e)}", err=True)
+                sys.exit(1)
+                elif output_format == 'yaml':
+                    import yaml
+                    with open(output_path, 'w', encoding='utf-8') as f:
+                        yaml.dump(metrics.__dict__, f, default_flow_style=False)
+                elif output_format == 'csv':
+                    import pandas as pd
+                    df = pd.DataFrame([metrics.__dict__])
+                    df.to_csv(output_path, index=False)
             
             if not ctx.obj.get('quiet'):
                 click.echo(f"Results saved to {output_path}")
@@ -119,15 +123,19 @@ def report(ctx, days: int, output: Optional[str], output_format: str, template: 
         
         # Save report
         if output:
-            output_dir = _safe_path(output)
-            output_dir.mkdir(parents=True, exist_ok=True)
-            
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"dora_report_{timestamp}.{output_format}"
-            report_path = output_dir / filename
-            
-            with open(report_path, 'w') as f:
-                f.write(report_content)
+            try:
+                output_dir = _safe_path(output)
+                output_dir.mkdir(parents=True, exist_ok=True)
+                
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                filename = f"dora_report_{timestamp}.{output_format}"
+                report_path = output_dir / filename
+                
+                with open(report_path, 'w', encoding='utf-8') as f:
+                    f.write(report_content)
+            except (ValueError, OSError) as e:
+                click.echo(f"Error with output path: {str(e)}", err=True)
+                sys.exit(1)
             
             if not ctx.obj.get('quiet'):
                 click.echo(f"Report saved to {report_path}")
@@ -349,11 +357,15 @@ reporting:
 """
     
     if output:
-        output_path = _safe_path(output)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        
-        with open(output_path, 'w') as f:
-            f.write(template_content)
+        try:
+            output_path = _safe_path(output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(template_content)
+        except (ValueError, OSError) as e:
+            click.echo(f"Error with output path: {str(e)}", err=True)
+            sys.exit(1)
         
         click.echo(f"Configuration template saved to {output_path}")
     else:
