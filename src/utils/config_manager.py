@@ -22,7 +22,7 @@ class ConfigManager:
             config_path: Path to configuration file
         """
         self.logger = setup_logger(__name__)
-        self.config_path = config_path or self._find_config_file()
+        self.config_path = self._safe_path(config_path) if config_path else self._find_config_file()
         self.config = self._load_config()
     
     def _find_config_file(self) -> str:
@@ -331,3 +331,42 @@ class ConfigManager:
             safe_config['database'] = database_config
         
         return safe_config
+    
+    def _safe_path(self, user_path: str) -> str:
+        """
+        Safely resolve user-provided path to prevent path traversal.
+        
+        Args:
+            user_path: User-provided path
+            
+        Returns:
+            Safe resolved path
+        """
+        if not user_path:
+            return user_path
+            
+        # Convert to Path object and resolve
+        path = Path(user_path).resolve()
+        
+        # Get current working directory
+        cwd = Path.cwd().resolve()
+        
+        # Check if path is within current directory or standard config locations
+        allowed_dirs = [
+            cwd,
+            Path.home() / '.vmware-dora-evidence',
+            Path('/etc/vmware-dora-evidence')
+        ]
+        
+        for allowed_dir in allowed_dirs:
+            try:
+                path.relative_to(allowed_dir)
+                return str(path)
+            except ValueError:
+                continue
+        
+        # If path is not in allowed directories, use safe filename in current directory
+        safe_name = os.path.basename(user_path).replace('/', '_').replace('\\', '_')
+        safe_path = cwd / safe_name
+        self.logger.warning(f"Path {user_path} not allowed, using {safe_path}")
+        return str(safe_path)

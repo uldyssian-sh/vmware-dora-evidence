@@ -42,11 +42,19 @@ class VMwareClient:
             if not all([host, username, password]):
                 raise ValueError("Missing required VMware connection parameters")
             
-            # Create SSL context
+            # Create SSL context with proper validation
             context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-            if self.config.get('ignore_ssl_errors', False):
+            
+            # Only disable SSL verification in development environment
+            ignore_ssl = self.config.get('ignore_ssl_errors', False)
+            if ignore_ssl and self.config.get('environment') == 'development':
+                self.logger.warning("SSL verification disabled for development environment")
                 context.check_hostname = False
                 context.verify_mode = ssl.CERT_NONE
+            else:
+                # Use secure defaults
+                context.check_hostname = True
+                context.verify_mode = ssl.CERT_REQUIRED
             
             # Connect to vCenter
             self.service_instance = SmartConnect(
