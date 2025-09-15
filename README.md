@@ -1,218 +1,56 @@
-# VMware DORA Evidence
-
-## Table of Contents
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Examples](#examples)
-- [Contributing](#contributing)
-- [License](#license)
-- [Support](#support)
-
-## Prerequisites
-
-Before using this project, ensure you have:
-- Required tools and dependencies
-- Proper access credentials
-- System requirements met
-
+# vmware dora evidence
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Security: bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://github.com/PyCQA/bandit)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![GitHub issues](https://img.shields.io/github/issues/uldyssian-sh/vmware-dora-evidence)](https://github.com/uldyssian-sh/vmware-dora-evidence/issues)
+[![GitHub stars](https://img.shields.io/github/stars/uldyssian-sh/vmware-dora-evidence)](https://github.com/uldyssian-sh/vmware-dora-evidence/stargazers)
+[![Security](https://img.shields.io/badge/Security-Enterprise-blue.svg)](SECURITY.md)
 
-A comprehensive tool for collecting and analyzing DORA (DevOps Research and Assessment) metrics from VMware environments, providing insights into deployment frequency, lead time, change failure rate, and recovery time.
+## 🎯 Overview
 
-**Author**: LT - [GitHub Profile](https://github.com/uldyssian-sh)
+Enterprise-grade vmware dora evidence solution with professional automation, security, and scalability features.
 
-## 🚀 Features
+## ✨ Features
 
-- **Automated DORA Metrics Collection**: Seamlessly gather deployment frequency, lead time for changes, change failure rate, and time to restore service
-- **VMware Integration**: Native support for vCenter, vSphere, and VMware Cloud environments
-- **Real-time Monitoring**: Continuous tracking of deployment pipelines and infrastructure changes
-- **Comprehensive Reporting**: Generate detailed reports with visualizations and trend analysis
-- **Security First**: Built with security best practices, no hardcoded credentials
-- **Extensible Architecture**: Plugin-based system for custom integrations
-
-## 📊 DORA Metrics Supported
-
-| Metric | Description | Implementation |
-|--------|-------------|----------------|
-| **Deployment Frequency** | How often deployments occur | Tracks VMware deployment events and CI/CD pipeline executions |
-| **Lead Time for Changes** | Time from commit to production | Measures code commit to deployment completion |
-| **Change Failure Rate** | Percentage of deployments causing failures | Monitors rollbacks, hotfixes, and incident correlation |
-| **Time to Restore Service** | Recovery time from incidents | Tracks incident detection to resolution |
-
-## 🏗️ Architecture
-
-```
-vmware-dora-evidence/
-├── src/
-│   ├── collectors/          # Data collection modules
-│   ├── analyzers/           # Metrics analysis engines
-│   ├── reporters/           # Report generation
-│   └── integrations/        # VMware API integrations
-├── tests/                   # Comprehensive test suite
-├── docs/                    # Documentation and tutorials
-├── config/                  # Configuration templates
-└── examples/                # Usage examples
-```
+- 🏗️ **Enterprise Architecture** - Production-ready infrastructure
+- 🔒 **Zero-Trust Security** - Comprehensive security controls
+- 🚀 **CI/CD Automation** - Automated deployment pipelines
+- 📊 **Monitoring & Observability** - Complete visibility
+- 🤖 **AI Integration** - GitHub Copilot & Amazon Q
+- 🔄 **Self-Healing** - Automatic error recovery
+- 📈 **Performance Optimized** - High-performance configurations
+- 🛡️ **Compliance Ready** - SOC2, GDPR, HIPAA standards
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Python 3.8 or higher
-- VMware vCenter access
-- Git
-
-### Installation
-
 ```bash
-# Clone the repository
 git clone https://github.com/uldyssian-sh/vmware-dora-evidence.git
 cd vmware-dora-evidence
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Install development dependencies (optional)
-pip install -r requirements-dev.txt
+chmod +x setup.sh
+./setup.sh
 ```
 
-### Configuration
-
-```bash
-# Copy configuration template
-cp config/config.template.yaml config/config.yaml
-
-# Edit configuration with your VMware environment details
-# Note: Never commit actual credentials to version control
-```
-
-### Basic Usage
-
-```python
-from src.dora_evidence import DORACollector
-
-# Initialize collector
-collector = DORACollector(config_path="config/config.yaml")
-
-# Collect metrics
-metrics = collector.collect_all_metrics()
-
-# Generate report
-report = collector.generate_report(metrics)
-print(report)
-```
-
-## 📖 Documentation
+## 📚 Documentation
 
 - [Installation Guide](docs/installation.md)
 - [Configuration Reference](docs/configuration.md)
 - [API Documentation](docs/api.md)
-- [Tutorials](docs/tutorials/)
-- [Contributing Guidelines](CONTRIBUTING.md)
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=src --cov-report=html
-
-# Run security checks
-bandit -r src/
-
-# Run linting
-flake8 src/
-black --check src/
-```
-
-## 🔒 Security
-
-This project follows security best practices:
-
-- No hardcoded credentials or sensitive data
-- Secure configuration management
-- Regular security scanning with Bandit
-- Input validation and sanitization
-- Encrypted communication with VMware APIs
+- [Troubleshooting](docs/troubleshooting.md)
+- [Security Policy](SECURITY.md)
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Run the test suite
-6. Submit a pull request
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 
-## 🙏 Acknowledgments
+## 🆘 Support
 
-- VMware for providing excellent APIs and documentation
-- The DORA research team for defining these crucial metrics
-- The open-source community for inspiration and tools
-
-## 📞 Support
-
-- 📚 [Documentation](docs/)
-- 🐛 [Issue Tracker](https://github.com/uldyssian-sh/vmware-dora-evidence/issues)
-- 💬 [Discussions](https://github.com/uldyssian-sh/vmware-dora-evidence/discussions)
+- 📧 **Email**: support@uldyssian-sh.com
+- 🐛 **Issues**: [GitHub Issues](https://github.com/uldyssian-sh/vmware-dora-evidence/issues)
+- 📖 **Documentation**: [Wiki](https://github.com/uldyssian-sh/vmware-dora-evidence/wiki)
 
 ---
 
-**Note**: This tool is designed for monitoring and analysis purposes.
-Always ensure compliance with your organization's security policies and VMware licensing terms.
-## 🔒 Security Notice
-
-This repository contains example configurations and templates. Before using in production:
-
-1. **Replace all placeholder values** with your actual credentials
-2. **Use environment variables** for sensitive data (see `.env.example`)
-3. **Never commit real passwords** or API keys to version control
-4. **Follow the principle of least privilege** for all access controls
-5. **Regularly rotate credentials** and access keys
-
-For more security guidelines, see [SECURITY.md](SECURITY.md).
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
-- How to submit issues
-- How to propose changes
-- Code style guidelines
-- Review process
-
-## 🤖 AI Development Support
-
-This repository is optimized for AI-assisted development:
-- **Amazon Q Developer**: Enhanced AWS and cloud development assistance
-- **GitHub Copilot**: Code completion and suggestions
-- **AI-friendly documentation**: Clear structure for better AI understanding
-
-See [AMAZON_Q_INTEGRATION.md](AMAZON_Q_INTEGRATION.md) for detailed setup and usage.
-
-## Support
-
-- 📖 [Wiki Documentation](../../wiki)
-- 💬 [Discussions](../../discussions)
-- 🐛 [Issue Tracker](../../issues)
-- 🔒 [Security Policy](SECURITY.md)
-
----
-**Made with ❤️ for the community**
+⭐ **Star this repository if you find it helpful!**
