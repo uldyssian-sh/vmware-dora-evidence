@@ -241,12 +241,12 @@ performance:
   parallel_processing:
     enabled: true
     max_workers: 4
-  
+
   cache:
     enabled: true
     ttl_seconds: 3600
     max_size_mb: 100
-  
+
   database:
     connection_pool_size: 10
     query_timeout_seconds: 30

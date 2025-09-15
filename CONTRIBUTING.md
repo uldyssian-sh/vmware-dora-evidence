@@ -171,22 +171,22 @@ def collect_deployment_data(
 ) -> List[Dict[str, Any]]:
     """
     Collect deployment data from VMware environment.
-    
+
     Args:
         start_date: Start date for data collection
         end_date: End date for data collection
         max_records: Maximum number of records to collect
-        
+
     Returns:
         List of deployment records
-        
+
     Raises:
         ValueError: If date range is invalid
         ConnectionError: If VMware connection fails
     """
     if start_date >= end_date:
         raise ValueError("Start date must be before end date")
-    
+
     # Implementation here
     return []
 ```
@@ -211,39 +211,39 @@ from src.collectors.deployment_collector import DeploymentCollector
 
 class TestDeploymentCollector:
     """Test suite for DeploymentCollector."""
-    
+
     def setup_method(self):
         """Set up test fixtures."""
         self.mock_client = Mock()
         self.collector = DeploymentCollector(self.mock_client)
-    
+
     def test_collect_deployments_success(self):
         """Test successful deployment collection."""
         # Arrange
         expected_deployments = [{"id": "test-1", "status": "success"}]
         self.mock_client.get_events.return_value = expected_deployments
-        
+
         # Act
         result = self.collector.collect_deployments(
             start_date=datetime(2023, 1, 1),
             end_date=datetime(2023, 1, 31)
         )
-        
+
         # Assert
         assert len(result) == 1
         assert result[0]["id"] == "test-1"
-    
+
     def test_collect_deployments_empty_result(self):
         """Test deployment collection with no results."""
         # Arrange
         self.mock_client.get_events.return_value = []
-        
+
         # Act
         result = self.collector.collect_deployments(
             start_date=datetime(2023, 1, 1),
             end_date=datetime(2023, 1, 31)
         )
-        
+
         # Assert
         assert len(result) == 0
 ```
@@ -280,17 +280,17 @@ def calculate_dora_metrics(
 ) -> Dict[str, float]:
     """
     Calculate DORA metrics from deployment and incident data.
-    
+
     This function computes the four key DORA metrics:
     - Deployment Frequency
     - Lead Time for Changes
     - Change Failure Rate
     - Time to Restore Service
-    
+
     Args:
         deployments: List of deployment records with timestamps and status
         incidents: List of incident records with resolution times
-        
+
     Returns:
         Dictionary containing calculated DORA metrics:
         {
@@ -299,10 +299,10 @@ def calculate_dora_metrics(
             'change_failure_rate': float,
             'time_to_restore_service': float
         }
-        
+
     Raises:
         ValueError: If input data is invalid or insufficient
-        
+
     Example:
         >>> deployments = [{'timestamp': '2023-01-01', 'status': 'success'}]
         >>> incidents = [{'resolution_time': 30}]
