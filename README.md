@@ -159,7 +159,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Note**: This tool is designed for monitoring and analysis purposes. Always ensure compliance with your organization's security policies and VMware licensing terms.
+**Note**: This tool is designed for monitoring and analysis purposes.
+Always ensure compliance with your organization's security policies and VMware licensing terms.
 ## 🔒 Security Notice
 
 This repository contains example configurations and templates. Before using in production:
