@@ -200,3 +200,14 @@ dev/
 # Documentation build
 docs/build/
 docs/_build/
+# Performance optimization
+*.log
+*.tmp
+*.cache
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+node_modules/
+.vscode/settings.json
+.idea/
