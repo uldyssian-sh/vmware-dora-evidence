@@ -1,24 +1,7 @@
-# Include production requirements
--r requirements.txt
-
-# Testing
-pytest>=6.2.0
-pytest-cov>=3.0.0
-pytest-mock>=3.6.0
-
-# Code quality
-black>=22.0.0
-flake8>=4.0.0
-mypy>=0.991
-isort>=5.10.0
-bandit>=1.7.0
-
-# Documentation
-mkdocs>=1.4.0
-mkdocs-material>=8.5.0
-
-# Development tools
-ipython>=7.16.0
-
-# Security scanning
-safety>=2.0.0
+# Development dependencies
+pytest>=7.2.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+black>=22.10.0
+flake8>=6.0.0
+pre-commit>=2.20.0
