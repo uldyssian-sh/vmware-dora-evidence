@@ -1,11 +1,11 @@
 # VMware DORA Evidence Collection
 
 <div align="center">
-  <img src="https://cloud.google.com/static/images/dora-research-logo.png" alt="DORA Metrics" width="300"/>
   
-  [![DORA](https://img.shields.io/badge/DORA-Metrics-blue.svg)](https://www.devops-research.com/research.html)
+  [![DORA](https://img.shields.io/badge/DORA-Metrics-blue.svg)](https://dora.dev)
   [![DevOps](https://img.shields.io/badge/DevOps-Performance-green.svg)](https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![CI](https://github.com/uldyssian-sh/vmware-dora-evidence/workflows/CI/badge.svg)](https://github.com/uldyssian-sh/vmware-dora-evidence/actions)
 </div>
 
 ## 📊 Overview
@@ -37,23 +37,25 @@ Automated DORA (DevOps Research and Assessment) metrics collection and reporting
 ## 🚀 Quick Start
 
 ```bash
+# Clone repository
+git clone https://github.com/uldyssian-sh/vmware-dora-evidence.git
+cd vmware-dora-evidence
+
 # Install dependencies
 pip install -r requirements.txt
 
-# Configure data sources
-cp config/config.example.yml config/config.yml
-# Edit config.yml with your tool integrations
+# Configure VMware connection
+cp config/config.template.yaml config/config.yaml
+# Edit config.yaml with your VMware credentials
 
-# Collect metrics
-python dora_collector.py --period 30d --output-format json
+# Collect DORA metrics
+python -m src.cli collect --days 30 --format json
 
-# Generate report
-python generate_report.py --input metrics.json --format html
+# Generate HTML report
+python -m src.cli report --days 30 --format html
 ```
 
-## 📈 Dashboard Preview
 
-![DORA Dashboard](https://via.placeholder.com/800x500/4A90E2/FFFFFF?text=DORA+Metrics+Dashboard)
 
 ### Docker Deployment
 
@@ -73,10 +75,10 @@ docker run -d \
 
 ## 📖 Documentation
 
-- [Installation Guide](docs/installation.md)
-- [Configuration Guide](config/config.template.yaml)
-- [Examples](examples/)
+- [Configuration Template](config/config.template.yaml)
 - [PowerShell Script](dora-evidence.ps1)
+- [Examples Directory](examples/)
+- [Installation Guide](docs/installation.md)
 
 ## 🔧 Data Sources
 
@@ -127,11 +129,11 @@ docker run -d \
 }
 ```
 
-## 📚 Documentation
+## 🌐 Resources
 
-- [Setup Guide](https://github.com/uldyssian-sh/vmware-dora-evidence/wiki/Setup)
-- [Data Source Configuration](https://github.com/uldyssian-sh/vmware-dora-evidence/wiki/Data-Sources)
-- [Report Customization](https://github.com/uldyssian-sh/vmware-dora-evidence/wiki/Reports)
+- [DORA Research](https://dora.dev)
+- [Four Key Metrics Guide](https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance)
+- [VMware vSphere API](https://developer.vmware.com/apis/vsphere-automation/latest/)
 
 ## 📄 License
 
