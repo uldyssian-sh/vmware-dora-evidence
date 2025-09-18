@@ -42,17 +42,17 @@ class VMwareClient:
             if not all([host, username, password]):
                 raise ValueError("Missing required VMware connection parameters")
             
-            # Create SSL context with proper validation
-            context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            # Create SSL context with secure defaults
+            context = ssl.create_default_context()
             
-            # Only disable SSL verification in development environment
+            # Only disable SSL verification if explicitly configured (not recommended for production)
             ignore_ssl = self.config.get('ignore_ssl_errors', False)
-            if ignore_ssl and self.config.get('environment') == 'development':
-                self.logger.warning("SSL verification disabled for development environment")
+            if ignore_ssl:
+                self.logger.warning("SSL certificate verification is disabled - use only in development/testing")
                 context.check_hostname = False
                 context.verify_mode = ssl.CERT_NONE
             else:
-                # Use secure defaults
+                # Use secure defaults for production
                 context.check_hostname = True
                 context.verify_mode = ssl.CERT_REQUIRED
             
@@ -217,15 +217,19 @@ class VMwareClient:
                 vm_dict = {
                     'name': vm.name,
                     'moId': vm._moId,
-                    'powerState': vm.runtime.powerState,
+                    'powerState': vm.runtime.powerState if vm.runtime else None,
                     'guestOS': vm.config.guestFullName if vm.config else None,
-                    'numCPU': vm.config.hardware.numCPU if vm.config else None,
-                    'memoryMB': vm.config.hardware.memoryMB if vm.config else None,
-                    'host': vm.runtime.host.name if vm.runtime.host else None
+                    'numCPU': vm.config.hardware.numCPU if vm.config and vm.config.hardware else None,
+                    'memoryMB': vm.config.hardware.memoryMB if vm.config and vm.config.hardware else None,
+                    'host': vm.runtime.host.name if vm.runtime and vm.runtime.host else None
                 }
                 vms.append(vm_dict)
             
-            container.Destroy()
+            try:
+                container.Destroy()
+            except Exception as cleanup_error:
+                self.logger.warning(f"Error during cleanup: {str(cleanup_error)}")
+            
             self.logger.info(f"Retrieved {len(vms)} virtual machines")
             return vms
             
@@ -255,11 +259,11 @@ class VMwareClient:
                 host_dict = {
                     'name': host.name,
                     'moId': host._moId,
-                    'connectionState': host.runtime.connectionState,
-                    'powerState': host.runtime.powerState,
-                    'version': host.config.product.version if host.config else None,
-                    'build': host.config.product.build if host.config else None,
-                    'numCpuCores': host.hardware.cpuInfo.numCpuCores if host.hardware else None,
+                    'connectionState': host.runtime.connectionState if host.runtime else None,
+                    'powerState': host.runtime.powerState if host.runtime else None,
+                    'version': host.config.product.version if host.config and host.config.product else None,
+                    'build': host.config.product.build if host.config and host.config.product else None,
+                    'numCpuCores': host.hardware.cpuInfo.numCpuCores if host.hardware and host.hardware.cpuInfo else None,
                     'memorySize': host.hardware.memorySize if host.hardware else None
                 }
                 hosts.append(host_dict)
@@ -335,4 +339,8 @@ class VMwareClient:
     
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit."""
-        self.disconnect()
+        try:
+            self.disconnect()
+        except Exception as e:
+            self.logger.warning(f"Error during context manager cleanup: {str(e)}")
+        return False  # Don't suppress exceptions

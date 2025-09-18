@@ -331,12 +331,20 @@ class ConfigManager:
                 vmware_config['password'] = '<REDACTED>'
             safe_config['vmware'] = vmware_config
         
-        # Remove database passwords
+        # Remove database passwords using proper URL parsing
         if 'database' in safe_config:
             database_config = safe_config['database'].copy()
-            if 'url' in database_config and 'password' in database_config['url']:
-                # This is a simple approach - in production, use proper URL parsing
-                database_config['url'] = '<REDACTED>'
+            if 'url' in database_config:
+                from urllib.parse import urlparse, urlunparse
+                try:
+                    parsed_url = urlparse(database_config['url'])
+                    if parsed_url.password:
+                        # Replace password with redacted placeholder
+                        safe_url = parsed_url._replace(netloc=parsed_url.netloc.replace(f':{parsed_url.password}', ':<REDACTED>'))
+                        database_config['url'] = urlunparse(safe_url)
+                except Exception:
+                    # If URL parsing fails, redact entire URL for safety
+                    database_config['url'] = '<REDACTED>'
             safe_config['database'] = database_config
         
         return safe_config

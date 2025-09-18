@@ -55,6 +55,29 @@ python generate_report.py --input metrics.json --format html
 
 ![DORA Dashboard](https://via.placeholder.com/800x500/4A90E2/FFFFFF?text=DORA+Metrics+Dashboard)
 
+### Docker Deployment
+
+```bash
+# Build Docker image
+docker build -t vmware-dora-evidence .
+
+# Run container with configuration
+docker run -d \
+  --name dora-evidence \
+  -p 8000:8000 \
+  -v $(pwd)/config:/app/config \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/reports:/app/reports \
+  vmware-dora-evidence
+```
+
+## 📖 Documentation
+
+- [Installation Guide](docs/installation.md)
+- [Configuration Guide](config/config.template.yaml)
+- [Examples](examples/)
+- [PowerShell Script](dora-evidence.ps1)
+
 ## 🔧 Data Sources
 
 ### Version Control

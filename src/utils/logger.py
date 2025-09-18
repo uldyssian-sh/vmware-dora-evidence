@@ -8,6 +8,32 @@ from typing import Optional
 import structlog
 
 
+# Global flag to ensure structlog is configured only once
+_structlog_configured = False
+
+def _configure_structlog():
+    """Configure structlog once globally."""
+    global _structlog_configured
+    if not _structlog_configured:
+        structlog.configure(
+            processors=[
+                structlog.stdlib.filter_by_level,
+                structlog.stdlib.add_logger_name,
+                structlog.stdlib.add_log_level,
+                structlog.stdlib.PositionalArgumentsFormatter(),
+                structlog.processors.TimeStamper(fmt="iso"),
+                structlog.processors.StackInfoRenderer(),
+                structlog.processors.format_exc_info,
+                structlog.processors.UnicodeDecoder(),
+                structlog.processors.JSONRenderer()
+            ],
+            context_class=dict,
+            logger_factory=structlog.stdlib.LoggerFactory(),
+            wrapper_class=structlog.stdlib.BoundLogger,
+            cache_logger_on_first_use=True,
+        )
+        _structlog_configured = True
+
 def setup_logger(name: str, level: Optional[str] = None) -> logging.Logger:
     """
     Set up structured logger for the application.
@@ -19,24 +45,8 @@ def setup_logger(name: str, level: Optional[str] = None) -> logging.Logger:
     Returns:
         Configured logger instance
     """
-    # Configure structlog
-    structlog.configure(
-        processors=[
-            structlog.stdlib.filter_by_level,
-            structlog.stdlib.add_logger_name,
-            structlog.stdlib.add_log_level,
-            structlog.stdlib.PositionalArgumentsFormatter(),
-            structlog.processors.TimeStamper(fmt="iso"),
-            structlog.processors.StackInfoRenderer(),
-            structlog.processors.format_exc_info,
-            structlog.processors.UnicodeDecoder(),
-            structlog.processors.JSONRenderer()
-        ],
-        context_class=dict,
-        logger_factory=structlog.stdlib.LoggerFactory(),
-        wrapper_class=structlog.stdlib.BoundLogger,
-        cache_logger_on_first_use=True,
-    )
+    # Configure structlog once
+    _configure_structlog()
     
     # Get logger
     logger = structlog.get_logger(name)

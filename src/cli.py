@@ -390,35 +390,26 @@ def _safe_path(user_path: str) -> Path:
     # Remove null bytes and normalize
     clean_path = user_path.replace('\x00', '')
     
-    # Convert to Path object
-    path = Path(clean_path)
-    
     # Get current working directory
     cwd = Path.cwd().resolve()
     
-    # If path is absolute, make it relative to cwd
-    if path.is_absolute():
-        # Extract just the filename for security
-        safe_name = os.path.basename(clean_path)
-        # Sanitize filename
-        safe_name = ''.join(c for c in safe_name if c.isalnum() or c in '.-_')
-        if not safe_name:
-            safe_name = 'output'
-        path = Path(safe_name)
+    # Extract just the filename for security (prevent directory traversal)
+    safe_name = os.path.basename(clean_path)
     
-    # Resolve to absolute path within cwd
-    resolved_path = (cwd / path).resolve()
+    # Sanitize filename - only allow alphanumeric, dots, dashes, underscores
+    safe_name = ''.join(c for c in safe_name if c.isalnum() or c in '.-_')
+    if not safe_name:
+        safe_name = 'output'
     
-    # Security check: ensure resolved path is within current directory
+    # Always create path within current directory
+    resolved_path = cwd / safe_name
+    
+    # Final security check: ensure resolved path is within current directory
     try:
-        resolved_path.relative_to(cwd)
+        resolved_path.resolve().relative_to(cwd)
     except ValueError:
-        # Path escapes current directory, use safe fallback
-        safe_name = os.path.basename(user_path)
-        safe_name = ''.join(c for c in safe_name if c.isalnum() or c in '.-_')
-        if not safe_name:
-            safe_name = 'output'
-        resolved_path = cwd / safe_name
+        # Fallback to safe default
+        resolved_path = cwd / 'output'
     
     return resolved_path
 

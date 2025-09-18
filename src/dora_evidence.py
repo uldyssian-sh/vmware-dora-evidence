@@ -3,7 +3,7 @@ Main DORA Evidence module providing core functionality for metrics collection an
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 
@@ -49,6 +49,7 @@ class DORACollector:
         self.deployment_collector = DeploymentCollector(self.vmware_client)
         self.incident_collector = IncidentCollector(self.vmware_client)
         self.analyzer = MetricsAnalyzer()
+        self.reporter = ReportGenerator()
         
         self.logger.info("DORA Collector initialized successfully")
     
@@ -64,7 +65,7 @@ class DORACollector:
         """
         self.logger.info(f"Collecting deployment data for last {days} days")
         
-        end_date = datetime.now()
+        end_date = datetime.now(timezone.utc)
         start_date = end_date - timedelta(days=days)
         
         deployments = self.deployment_collector.collect_deployments(
@@ -87,7 +88,7 @@ class DORACollector:
         """
         self.logger.info(f"Collecting incident data for last {days} days")
         
-        end_date = datetime.now()
+        end_date = datetime.now(timezone.utc)
         start_date = end_date - timedelta(days=days)
         
         incidents = self.incident_collector.collect_incidents(
@@ -119,7 +120,7 @@ class DORACollector:
             change_failure_rate=metrics['change_failure_rate'],
             time_to_restore_service=metrics['time_to_restore_service'],
             measurement_period="30 days",
-            timestamp=datetime.now()
+            timestamp=datetime.now(timezone.utc)
         )
     
     def collect_all_metrics(self, days: int = 30) -> DORAMetrics:
@@ -155,8 +156,7 @@ class DORACollector:
         Returns:
             Generated report content
         """
-        reporter = ReportGenerator()
-        return reporter.generate_report(metrics, output_format)
+        return self.reporter.generate_report(metrics, output_format)
 
 
 class DORAAnalyzer:
